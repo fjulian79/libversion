@@ -27,7 +27,6 @@ if not os.path.exists("version"):
     os.makedirs('version')
 
 targetFileName= os.getcwd() + "/version/version.h"
-#filename = env['PROJECT_INCLUDE_DIR'] + "/version.h"
 
 projectPath = env['PROJECT_DIR']
 projectName = os.path.basename(projectPath)
@@ -45,26 +44,26 @@ git_remote_origin_url = ret.stdout.strip()
 if git_remote_origin_url:
   git_issue_url = "*\n * You can file issues at " + git_remote_origin_url.rstrip(".git") + "/issues\n "
 else:  
-  git_remote_origin_url="No remote url set"
+  git_remote_origin_url="n.a."
   git_issue_url = ""
 
 # git branch --show-current                                                   
 ret = subprocess.run(["git", "branch", "--show-current"], stdout=subprocess.PIPE, text=True)
 git_branch = ret.stdout.strip()
 if not git_branch:
-  git_branch="undefined"
-
-# git describe --abbrev=0 --tags 
-ret = subprocess.run(["git", "describe", "--abbrev=0", "--tags"], stdout=subprocess.PIPE, text=True)
-git_version_short = ret.stdout.strip()
-if not git_version_short:
-  git_version_short="unknown"
+  git_branch="n.a."
 
 # git describe --abbrev --dirty --always --tags
 ret = subprocess.run(["git", "describe", "--abbrev", "--dirty", "--always", "--tags"], stdout=subprocess.PIPE, text=True)
 git_version_long = ret.stdout.strip()
 if not git_version_long:
-  git_version_long=git_version_short
+  git_version_long="n.a."
+
+# git describe --abbrev=0 --tags 
+ret = subprocess.run(["git", "describe", "--abbrev=0", "--tags"], stdout=subprocess.PIPE, text=True)
+git_version_short = ret.stdout.strip()
+if not git_version_short:
+  git_version_short=git_version_long
 
 file = open(targetFileName, "w")
 
