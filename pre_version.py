@@ -34,6 +34,8 @@ projectName = os.path.basename(projectPath)
 # until now we are in the directory of libversion, have to move to the projects home to work in it's git repo.
 os.chdir(projectPath)
 
+print("libversion: Collecting git data in "+ projectPath)
+
 # having date and time definitions here causes them to be refreshed at each and very build
 build_date = time.strftime("%b %d %Y")
 build_time = time.strftime("%H:%M:%S")
@@ -59,11 +61,13 @@ git_version_long = ret.stdout.strip()
 if not git_version_long:
   git_version_long="n.a."
 
-# git describe --abbrev=0 --tags 
-ret = subprocess.run(["git", "describe", "--abbrev=0", "--tags"], stdout=subprocess.PIPE, text=True)
+# git describe --tags 
+ret = subprocess.run(["git", "describe", "--tags"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 git_version_short = ret.stdout.strip()
 if not git_version_short:
   git_version_short=git_version_long
+
+print("libversion: Writing " + targetFileName)
 
 file = open(targetFileName, "w")
 
